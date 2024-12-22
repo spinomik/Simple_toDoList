@@ -1,0 +1,35 @@
+services:
+    db:
+        image: mysql:latest
+        container_name: ${DB_CONTAINER_NAME}
+        environment:
+            - DB_PORT=${DB_PORT}
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+            - MYSQL_DATABASE=${DB_DATABASE}
+            - MYSQL_USER=${DB_USER_USERNAME}
+            - MYSQL_PASSWORD=${DB_USER_PASSWORD}
+        ports:
+            - "3306:3306"
+        networks:
+            - app-network
+
+    app:
+        image: composer:latest
+        depends_on:
+            - db
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: ${APP_CONTAINER_NAME}
+        working_dir: /var/www/html
+        volumes:
+            - .:/var/www/html
+        entrypoint: ["/bin/bash", "/usr/local/bin/entrypoint.sh"]
+        ports:
+            - "8080:8080"
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge
