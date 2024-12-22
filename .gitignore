@@ -10,7 +10,6 @@
 /.env.*.local
 .env.backup
 .env.production
-/bootstrap/cache/
 /public/storage
 /.phpunit.cache
 /public/build
